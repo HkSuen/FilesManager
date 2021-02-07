@@ -1,4 +1,5 @@
 using FilesManager.Api.Comm;
+using FilesManager.Api.Comm.Config;
 using FilesManager.Api.Model;
 
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,7 @@ namespace FilesManager.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            new Appsettings();
         }
 
         public IConfiguration Configuration { get; }
@@ -40,6 +42,15 @@ namespace FilesManager.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FilesManager.Api", Version = "v1" });
             });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("any", builder =>
+            //    {
+            //        builder.WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
+            //        .AllowCredentials()//指定处理cookie
+            //    .AllowAnyOrigin(); //允许任何来源的主机访问
+            //    });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +68,13 @@ namespace FilesManager.Api
                 FileProvider = new PhysicalFileProvider(
                 Path.Combine(Directory.GetCurrentDirectory(), @"UploadFiles")),
                 RequestPath = new PathString("/UploadFiles")
+            });
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+                builder.AllowAnyOrigin();
             });
 
             app.UseHttpsRedirection();

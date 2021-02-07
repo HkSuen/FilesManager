@@ -12,4 +12,12 @@ namespace FilesManager.Api.Model
         public long UploadSizeLimit { get; set; }
         public long DownloadSizeLimit { get; set; }
     }
+
+    public static class ConfigSettingModelExtends
+    {
+        public static string GetAllowType(this ConfigSettingModel config)
+        {
+            return config.AllowType;
+        }
+    }
 }

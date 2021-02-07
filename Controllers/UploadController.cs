@@ -1,5 +1,7 @@
 ﻿using FilesManager.Api.Comm;
+using FilesManager.Api.Comm.Filters;
 using FilesManager.Api.Model;
+using FilesManager.Api.Model.ReqAndRepModel;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +20,8 @@ namespace FilesManager.Api.Controllers
     {
         private static IFileMagr _fileManager;
         private static string _uploadDirectory = "/UploadFiles/";
-        public UploadController(IFileMagr fileMagr, IWebHostEnvironment hostingEnvironment, IOptions<ConfigSettingModel> configSettings, ILogger<Controller> logger) 
-            : base(hostingEnvironment,configSettings, logger)
+        public UploadController(IFileMagr fileMagr, IWebHostEnvironment hostingEnvironment, IOptions<ConfigSettingModel> configSettings, ILogger<Controller> logger)
+            : base(hostingEnvironment, configSettings, logger)
         {
             _fileManager = fileMagr;
         }
@@ -37,9 +39,12 @@ namespace FilesManager.Api.Controllers
         /// }
         /// </summary>
         /// <returns></returns>
+        /// 
+        [FileType]
         [HttpPost("filesAsync")]
         public async Task<IActionResult> FilesAsync()
         {
+            ResponseModel response = new ResponseModel() { code = ResultCode.SCCUESS};
             bool End = false;
             int chunkCount = 0, chunkIndex = 0;
             string FileName = string.Empty;
@@ -99,9 +104,12 @@ namespace FilesManager.Api.Controllers
             }
             catch (Exception ex)
             {
-                return Ok(new { status = false, Msg = ex.Message });
+                response.code = ResultCode.SYSTEM_INNER_ERROR;
+                response.msg = ex.ToString();
+                return Ok(response);
             }
-            return Ok(new { status = true, end = End, chunkIndex, chunkCount, fileName = FileName });
+            response.data = new { status = true, end = End, chunkIndex, chunkCount, fileName = FileName };
+            return Ok(response);
         }
 
 

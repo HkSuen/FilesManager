@@ -28,7 +28,6 @@ namespace FilesManager.Api.Controllers
             _logger = logger;
         }
 
-
         protected string _webRootPath { 
             get
             {
