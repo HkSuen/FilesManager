@@ -42,15 +42,6 @@ namespace FilesManager.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FilesManager.Api", Version = "v1" });
             });
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("any", builder =>
-            //    {
-            //        builder.WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
-            //        .AllowCredentials()//指定处理cookie
-            //    .AllowAnyOrigin(); //允许任何来源的主机访问
-            //    });
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
